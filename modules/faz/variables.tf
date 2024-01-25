@@ -1,65 +1,71 @@
-# GCP resourcers prefix description
 variable "prefix" {
+  description = "GCP resourcers prefix description"
   type    = string
   default = "terraform"
 }
-# GCP region
+
 variable "region" {
+  description = "GCP region"
   type    = string
   default = "europe-west4" #Default Region
 }
-# GCP zone
+
 variable "zone" {
+  description = "GCP zone"
   type    = string
   default = "europe-west4-a" #Default Zone
 }
 
-# GCP instance machine type
 variable "machine" {
+  description = "GCP instance machine type"
   type    = string
   default = "n1-standard-4"
 }
 
-# license file for active
 variable "license_file" {
+  description = "license file for active"
   type    = string
   default = "./licenses/licenseFAZ.lic"
 }
 
-// License Type to create FortiGate-VM
-// Provide the license type for FortiGate-VM Instances, either byol or payg.
 variable "license_type" {
+  description = "Provide the license type for FortiGate-VM Instances, either byol or payg."
+  type = string
   default = "byol"
 }
 
 variable "faz_version" {
+  description = "FortiAnalyzer version"
   type    = string
   default = "724"
 }
 
-// SSH RSA public key for KeyPair if not exists
 variable "rsa-public-key" {
+  description = "SSH RSA public key for KeyPair if not exists"
   type    = string
   default = null
 }
 
-// GCP user name launch Terrafrom
 variable "gcp-user_name" {
+  description = "GCP user name launch Terrafrom"
   type    = string
   default = null
 }
 
 variable "admin_username" {
+  description = "FortiAnalyzer admin username"
   type    = string
   default = "admin"
 }
 
 variable "faz_ni_ips" {
+  description = "FortiAnalyzer IPs asignated to interfaces"
   type    = map(string)
   default = null
 }
 
 variable "subnet_names" {
+  description = "Map of subnets names where FortiAnalyzer will have an interface"
   type    = map(string)
   default = null
 }

@@ -7,15 +7,15 @@ data "template_file" "fgt_active" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub["id"]}-1"
-    admin_port     = var.admin_port
-    admin_cidr     = var.admin_cidr
-    adminusername  = "admin"
-    type           = var.license_type
-    license_file   = var.license_file_1
+    fgt_id          = var.config_spoke ? "${var.spoke["id"]}-1" : "${var.hub[0]["id"]}-1"
+    admin_port      = var.admin_port
+    admin_cidr      = var.admin_cidr
+    adminusername   = "admin"
+    type            = var.license_type
+    license_file    = var.license_file_1
     fortiflex_token = var.fortiflex_token_1
-    rsa-public-key = trimspace(var.rsa-public-key)
-    api_key        = var.api_key == null ? random_string.api_key.result : var.api_key
+    rsa-public-key  = trimspace(var.rsa-public-key)
+    api_key         = var.api_key == null ? random_string.api_key.result : var.api_key
 
     public_port  = var.public_port
     public_ip    = var.fgt-active-ni_ips["public"]
@@ -33,26 +33,26 @@ data "template_file" "fgt_active" {
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
     mgmt_cidr    = var.subnet_cidrs["mgmt"]
 
-    fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
-    fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-active-config.rendered : ""
-    fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
-    fgt_bgp-config         = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
-    fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_active_static-config.rendered : ""
-    fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
-    fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vpn-config         = var.config_hub ? data.template_file.fgt_vpn-config.0.rendered : ""
-    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
-    fgt_faz-config         = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
-    fgt_ncc-config         = var.config_ncc ? data.template_file.fgt_ncc-config.rendered : ""
-    fgt_xlb-config         = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
-    fgt_extra-config       = var.fgt_active_extra-config
+    fgt_sdn-config     = data.template_file.fgt_sdn-config.rendered
+    fgt_ha-fgcp-config = var.config_fgcp ? data.template_file.fgt_ha-fgcp-active-config.rendered : ""
+    fgt_ha-fgsp-config = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
+    fgt_bgp-config     = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
+    fgt_static-config  = var.vpc-spoke_cidr != null ? data.template_file.fgt_active_static-config.rendered : ""
+    fgt_sdwan-config   = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
+    fgt_vxlan-config   = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
+    fgt_vpn-config     = var.config_hub ? join("\n", data.template_file.fgt_vpn-config.*.rendered) : ""
+    fgt_fmg-config     = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
+    fgt_faz-config     = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
+    fgt_ncc-config     = var.config_ncc ? data.template_file.fgt_ncc-config.rendered : ""
+    fgt_xlb-config     = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
+    fgt_extra-config   = var.fgt_active_extra-config
   }
 }
 
 data "template_file" "fgt_sdn-config" {
   template = templatefile("${path.module}/templates/gcp_fgt-sdn.conf", {
-    cluster_pips = var.config_fgcp && var.cluster_pips != null ?  var.cluster_pips : null
-    route_tables = var.config_fgcp && var.route_tables != null ?  var.route_tables : null
+    cluster_pips = var.config_fgcp && var.cluster_pips != null ? var.cluster_pips : null
+    route_tables = var.config_fgcp && var.route_tables != null ? var.route_tables : null
   })
 }
 
@@ -105,23 +105,26 @@ data "template_file" "fgt_sdwan-config" {
 }
 
 data "template_file" "fgt_vpn-config" {
-  count    = var.config_fgsp ? 2 : 1
+  count    = length(var.hub)
   template = file("${path.module}/templates/fgt-vpn.conf")
   vars = {
-    hub_private-ip        = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 1)
-    network_id            = var.hub["network_id"]
-    ike-version           = var.hub["ike-version"]
-    dpd-retryinterval     = var.hub["dpd-retryinterval"]
-    localid               = var.hub["id"]
-    mode-cfg              = var.hub["mode-cfg"]
-    site_private-ip_start = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 2)
-    site_private-ip_end   = cidrhost(cidrsubnet(var.hub["vpn_cidr"], 1, count.index), 14)
-    site_private-ip_mask  = cidrnetmask(cidrsubnet(var.hub["vpn_cidr"], 1, count.index))
-    vpn_psk               = var.hub["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub["vpn_psk"]
-    bgp-asn_spoke         = var.hub["bgp-asn_spoke"]
-    vpn_cidr              = cidrsubnet(var.hub["vpn_cidr"], 1, count.index)
-    vpn_port              = var.public_port
+    hub_private-ip        = cidrhost(var.hub[count.index]["vpn_cidr"], 1)
+    network_id            = lookup(var.hub[count.index], "network_id", "1")
+    ike-version           = lookup(var.hub[count.index], "ike-version", "2")
+    dpd-retryinterval     = lookup(var.hub[count.index], "dpd-retryinterval", "10")
+    localid               = lookup(var.hub[count.index], "id", "HUB")
+    local_gw              = lookup(var.hub[count.index], "local_gw", "")
+    mode_cfg              = lookup(var.hub[count.index], "mode-cfg", true)
+    site_private_ip_start = cidrhost(var.hub[count.index]["vpn_cidr"], 3)
+    site_private_ip_end   = cidrhost(var.hub[count.index]["vpn_cidr"], -2)
+    site_private_ip_mask  = cidrnetmask(var.hub[count.index]["vpn_cidr"])
+    vpn_psk               = var.hub[count.index]["vpn_psk"] == "" ? random_string.vpn_psk.result : var.hub[count.index]["vpn_psk"]
+    bgp-asn_spoke         = var.hub[count.index]["bgp-asn_spoke"]
+    vpn_cidr              = var.hub[count.index]["vpn_cidr"]
+    vpn_port              = var.ports[lookup(var.hub[count.index], "vpn_port", "public")]
+    vpn_name              = "vpn-${lookup(var.hub[count.index], "vpn_port", "public")}"
     private_port          = var.private_port
+    count                 = count.index + 1
   }
 }
 
@@ -138,9 +141,9 @@ data "template_file" "fgt_spoke_bgp-config" {
 data "template_file" "fgt_hub_bgp-config" {
   template = file("${path.module}/templates/fgt-bgp.conf")
   vars = {
-    bgp-asn   = var.hub["bgp-asn_hub"]
+    bgp-asn   = var.hub[0]["bgp-asn_hub"]
     router-id = var.fgt-active-ni_ips["mgmt"]
-    network   = var.hub["cidr"]
+    network   = var.hub[0]["cidr"]
     role      = "hub"
   }
 }
@@ -188,8 +191,8 @@ data "template_file" "fgt_1_fmg-config" {
 
 data "template_file" "fgt_ncc-config" {
   template = templatefile("${path.module}/templates/gcp_fgt-ncc.conf", {
-    ncc_peers    = var.ncc_peers
-    ncc_bgp-asn  = var.ncc_bgp-asn
+    ncc_peers   = var.ncc_peers
+    ncc_bgp-asn = var.ncc_bgp-asn
   })
 }
 

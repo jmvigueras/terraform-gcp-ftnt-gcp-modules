@@ -7,15 +7,15 @@ data "template_file" "fgt_passive" {
   template = file("${path.module}/templates/fgt-all.conf")
 
   vars = {
-    fgt_id         = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub["id"]}-2"
-    admin_port     = var.admin_port
-    admin_cidr     = var.admin_cidr
-    adminusername  = "admin"
-    type           = var.license_type
-    license_file   = var.license_file_2
+    fgt_id          = var.config_spoke ? "${var.spoke["id"]}-2" : "${var.hub[0]["id"]}-2"
+    admin_port      = var.admin_port
+    admin_cidr      = var.admin_cidr
+    adminusername   = "admin"
+    type            = var.license_type
+    license_file    = var.license_file_2
     fortiflex_token = var.fortiflex_token_2
-    rsa-public-key = trimspace(var.rsa-public-key)
-    api_key        = var.api_key == null ? random_string.api_key.result : var.api_key
+    rsa-public-key  = trimspace(var.rsa-public-key)
+    api_key         = var.api_key == null ? random_string.api_key.result : var.api_key
 
     public_port  = var.public_port
     public_ip    = var.fgt-passive-ni_ips["public"]
@@ -33,19 +33,19 @@ data "template_file" "fgt_passive" {
     mgmt_gw      = cidrhost(var.subnet_cidrs["mgmt"], 1)
     mgmt_cidr    = var.subnet_cidrs["mgmt"]
 
-    fgt_sdn-config         = data.template_file.fgt_sdn-config.rendered
-    fgt_ha-fgcp-config     = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
-    fgt_ha-fgsp-config     = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
-    fgt_bgp-config         = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
-    fgt_static-config      = var.vpc-spoke_cidr != null ? data.template_file.fgt_passive_static-config.rendered : ""
-    fgt_sdwan-config       = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
-    fgt_vxlan-config       = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
-    fgt_vpn-config         = var.config_hub ? var.config_fgsp ? data.template_file.fgt_vpn-config.1.rendered : data.template_file.fgt_vpn-config.0.rendered : ""
-    fgt_fmg-config         = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
-    fgt_faz-config         = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
-    fgt_ncc-config         = var.config_ncc ? data.template_file.fgt_ncc-config.rendered : ""
-    fgt_xlb-config         = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
-    fgt_extra-config       = var.fgt_passive_extra-config
+    fgt_sdn-config     = data.template_file.fgt_sdn-config.rendered
+    fgt_ha-fgcp-config = var.config_fgcp ? data.template_file.fgt_ha-fgcp-passive-config.rendered : ""
+    fgt_ha-fgsp-config = var.config_fgsp ? data.template_file.fgt_ha-fgsp-passive-config.rendered : ""
+    fgt_bgp-config     = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
+    fgt_static-config  = var.vpc-spoke_cidr != null ? data.template_file.fgt_passive_static-config.rendered : ""
+    fgt_sdwan-config   = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
+    fgt_vxlan-config   = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
+    fgt_vpn-config     = var.config_hub ? join("\n", data.template_file.fgt_vpn-config.*.rendered) : ""
+    fgt_fmg-config     = var.config_fmg ? data.template_file.fgt_2_fmg-config.rendered : ""
+    fgt_faz-config     = var.config_faz ? data.template_file.fgt_2_faz-config.rendered : ""
+    fgt_ncc-config     = var.config_ncc ? data.template_file.fgt_ncc-config.rendered : ""
+    fgt_xlb-config     = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
+    fgt_extra-config   = var.fgt_passive_extra-config
   }
 }
 

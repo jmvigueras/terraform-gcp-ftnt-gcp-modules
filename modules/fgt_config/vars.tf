@@ -16,11 +16,11 @@ variable "config_fgsp" {
 # Route to change by SDN connector when FGCP and no LB
 #-----------------------------------------------------------------------------------
 variable "route_tables" {
-  type = list(string)
+  type    = list(string)
   default = null
 }
 variable "cluster_pips" {
-  type = list(string)
+  type    = list(string)
   default = null
 }
 
@@ -76,19 +76,22 @@ variable "config_hub" {
 
 // Variable to create a a VPN HUB
 variable "hub" {
-  type = map(any)
-  default = {
-    id                = "fgt"
-    bgp-asn_hub       = "65002"
-    bgp-asn_spoke     = "65000"
-    vpn_cidr          = "10.10.10.0/24"
-    vpn_psk           = "secret-key-123"
-    cidr              = "172.30.0.0/23"
-    ike-version       = "2"
-    network_id        = "1"
-    dpd-retryinterval = "5"
-    mode-cfg          = true
-  }
+  type = list(map(string))
+  default = [
+    {
+      id                = "fgt"
+      bgp-asn_hub       = "65002"
+      bgp-asn_spoke     = "65000"
+      vpn_cidr          = "10.10.10.0/24"
+      vpn_psk           = "secret-key-123"
+      cidr              = "172.30.0.0/23"
+      ike-version       = "2"
+      network_id        = "1"
+      dpd-retryinterval = "10"
+      mode_cfg          = true
+      vpn_port          = "public"
+    }
+  ]
 }
 
 variable "config_vxlan" {
@@ -152,14 +155,14 @@ variable "config_ncc" {
 }
 
 variable "ncc_bgp-asn" {
-  type = string 
+  type    = string
   default = "65515"
 }
 
 variable "ncc_peers" {
   type = list(list(string))
   default = [
-    ["172.30.0.68","172.30.0.69"]
+    ["172.30.0.68", "172.30.0.69"]
   ]
 }
 
@@ -173,7 +176,7 @@ variable "config_xlb" {
 }
 
 variable "ilb_ip" {
-  type = string 
+  type    = string
   default = "172.30.0.137"
 }
 
@@ -318,8 +321,8 @@ variable "fortiflex_token_2" {
 
 variable "keypair" {
   description = "Provide a keypair for accessing the FortiGate instances"
-  type      = string
-  default   = null
+  type        = string
+  default     = null
 }
 
 // SSH RSA public key for KeyPair if not exists
