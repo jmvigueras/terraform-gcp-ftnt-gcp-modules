@@ -51,9 +51,9 @@ module "fgt" {
   gcp-user_name  = split("@", data.google_client_openid_userinfo.me.email)[0]
   license_type   = local.license_type
 
-  subnet_names          = module.fgt_vpc.subnet_names
-  fgt-active-ni_ips     = module.fgt_vpc.fgt-active-ni_ips
-  fgt-passive-ni_ips    = module.fgt_vpc.fgt-passive-ni_ips
+  subnet_names       = module.fgt_vpc.subnet_names
+  fgt-active-ni_ips  = module.fgt_vpc.fgt-active-ni_ips
+  fgt-passive-ni_ips = module.fgt_vpc.fgt-passive-ni_ips
 
   fgt_config_1 = module.fgt_config.fgt_config_1
   fgt_config_2 = module.fgt_config.fgt_config_2

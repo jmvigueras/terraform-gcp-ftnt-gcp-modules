@@ -36,7 +36,7 @@ module "fgt_config" {
   fmg_ip       = module.fgt_vpc.fmg_ni_ips["private"]
   faz_ip       = module.fgt_vpc.faz_ni_ips["private"]
 
-  vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs,[module.fgt_vpc.subnet_cidrs["bastion"]])
+  vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs, [module.fgt_vpc.subnet_cidrs["bastion"]])
 }
 #------------------------------------------------------------------------------------------------------------
 # Create FGT cluster instances

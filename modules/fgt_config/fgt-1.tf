@@ -199,11 +199,11 @@ data "template_file" "fgt_ncc-config" {
 data "template_file" "fgt_xlb-config" {
   template = templatefile("${path.module}/templates/gcp_fgt-xlb.conf", {
     private_port = var.private_port
-    ilb_ip       = var.ilb_ip
+    ilb_ip       = var.ilb_ip != null ? var.ilb_ip : ""
+    public_port  = var.public_port
+    elb_ip       = var.elb_ip != null ? var.elb_ip : ""
   })
 }
-
-
 
 #------------------------------------------------------------------------------------
 # Generate random strings

@@ -22,7 +22,7 @@ resource "google_compute_subnetwork" "subnet_spoke" {
 
 ## Spoke peering to VPC private ##
 resource "google_compute_network_peering" "vpc_spoke_peer-to-private_1" {
-//  count                = var.fgt_vpc_self_link != null ? length(var.spoke-subnet_cidrs) : 0
+  //  count                = var.fgt_vpc_self_link != null ? length(var.spoke-subnet_cidrs) : 0
   count                = length(var.spoke-subnet_cidrs)
   name                 = "${var.prefix}-peer-spoke-${count.index + 1}-to-private-1"
   network              = var.fgt_vpc_self_link
@@ -31,7 +31,7 @@ resource "google_compute_network_peering" "vpc_spoke_peer-to-private_1" {
 }
 
 resource "google_compute_network_peering" "vpc_spoke_peer-to-private_2" {
-//  count                = var.fgt_vpc_self_link != null ? length(var.spoke-subnet_cidrs) : 0
+  //  count                = var.fgt_vpc_self_link != null ? length(var.spoke-subnet_cidrs) : 0
   count                = length(var.spoke-subnet_cidrs)
   name                 = "${var.prefix}-peer-spoke-${count.index + 1}-to-private-2"
   network              = google_compute_network.vpc_spoke[count.index].self_link

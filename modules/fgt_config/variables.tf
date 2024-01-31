@@ -94,6 +94,10 @@ variable "hub" {
   ]
 }
 
+#-----------------------------------------------------------------------------------
+# Predefined variables for creating VXLAN tunnels
+# - config_vxlan = false (default) 
+#-----------------------------------------------------------------------------------
 variable "config_vxlan" {
   type    = bool
   default = false
@@ -177,7 +181,12 @@ variable "config_xlb" {
 
 variable "ilb_ip" {
   type    = string
-  default = "172.30.0.137"
+  default = null
+}
+
+variable "elb_ip" {
+  type    = string
+  default = null
 }
 
 #-----------------------------------------------------------------------------------

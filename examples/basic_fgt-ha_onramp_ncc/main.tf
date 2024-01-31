@@ -33,7 +33,7 @@ module "fgt_config" {
   spoke        = local.onramp
   ncc_peers    = [module.fgt_vpc.ncc_private_ips]
 
-  vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs,[module.fgt_vpc.subnet_cidrs["bastion"]])
+  vpc-spoke_cidr = concat(local.vpc_spoke-subnet_cidrs, [module.fgt_vpc.subnet_cidrs["bastion"]])
 }
 #------------------------------------------------------------------------------------------------------------
 # Create FGT cluster instances
@@ -58,8 +58,8 @@ module "fgt" {
   fgt_config_1 = module.fgt_config.fgt_config_1
   fgt_config_2 = module.fgt_config.fgt_config_2
 
-  config_fgsp  = local.cluster_type == "fgsp" ? true : false
-  fgt_passive  = local.fgt_passive
+  config_fgsp = local.cluster_type == "fgsp" ? true : false
+  fgt_passive = local.fgt_passive
 }
 #------------------------------------------------------------------------------------------------------------
 # Create NCC Router Applicance (private)

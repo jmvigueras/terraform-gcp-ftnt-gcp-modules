@@ -32,7 +32,7 @@ resource "google_compute_address" "active-public-ip" {
 
 # Create FGTVM compute active instance
 resource "google_compute_instance" "fgt-active" {
-  name           = var.fgt_ha_fgsp ? "${var.prefix}-fgt-1" : "${var.prefix}-fgt-active"
+  name           = var.config_fgsp ? "${var.prefix}-fgt-1" : "${var.prefix}-fgt-active"
   machine_type   = var.machine
   zone           = var.zone1
   can_ip_forward = "true"
@@ -68,7 +68,7 @@ resource "google_compute_instance" "fgt-active" {
   metadata = {
     ssh-keys  = trimspace("${var.gcp-user_name}:${var.rsa-public-key}")
     user-data = var.fgt_config_1
-    license   = fileexists("${var.license_file_1}") ? "${file(var.license_file_1)}" : null
+    //license   = fileexists("${var.license_file_1}") ? "${file(var.license_file_1)}" : null
   }
   service_account {
     scopes = ["userinfo-email", "compute-rw", "storage-ro", "cloud-platform"]
@@ -114,7 +114,7 @@ resource "google_compute_address" "passive-public-ip" {
 # Create FGT passive instance (FGCP cluster)
 resource "google_compute_instance" "fgt-passive_fgcp" {
   count          = var.fgt-passive-ni_ips != null && var.fgt_passive && !var.config_fgsp ? 1 : 0
-  name           = var.fgt_ha_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
+  name           = var.config_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
   machine_type   = var.machine
   zone           = var.zone2
   can_ip_forward = "true"
@@ -146,8 +146,9 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
   }
 
   metadata = {
+    ssh-keys  = trimspace("${var.gcp-user_name}:${var.rsa-public-key}")
     user-data = var.fgt_config_2
-    license   = fileexists("${var.license_file_2}") ? "${file(var.license_file_2)}" : null
+    //license   = fileexists("${var.license_file_2}") ? "${file(var.license_file_2)}" : null
   }
   service_account {
     scopes = ["userinfo-email", "compute-rw", "storage-ro", "cloud-platform"]
@@ -162,7 +163,7 @@ resource "google_compute_instance" "fgt-passive_fgcp" {
 # Create FGT passive instance (FGCP cluster)
 resource "google_compute_instance" "fgt-passive_fgsp" {
   count          = var.fgt-passive-ni_ips != null && var.fgt_passive && var.config_fgsp ? 1 : 0
-  name           = var.fgt_ha_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
+  name           = var.config_fgsp ? "${var.prefix}-fgt-2" : "${var.prefix}-fgt-passive"
   machine_type   = var.machine
   zone           = var.zone2
   can_ip_forward = "true"
@@ -197,8 +198,9 @@ resource "google_compute_instance" "fgt-passive_fgsp" {
   }
 
   metadata = {
+    ssh-keys  = trimspace("${var.gcp-user_name}:${var.rsa-public-key}")
     user-data = var.fgt_config_2
-    license   = fileexists("${var.license_file_2}") ? "${file(var.license_file_2)}" : null
+    //license   = fileexists("${var.license_file_2}") ? "${file(var.license_file_2)}" : null
   }
   service_account {
     scopes = ["userinfo-email", "compute-rw", "storage-ro", "cloud-platform"]

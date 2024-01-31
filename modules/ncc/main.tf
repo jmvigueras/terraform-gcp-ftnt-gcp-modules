@@ -83,9 +83,9 @@ resource "google_compute_router_peer" "router-private-peer_active_2" {
 
 // Create fortigate passive BGP peer to Cloud Router Router Appliance
 resource "google_compute_router_peer" "router-private-peer_passive_1" {
-  depends_on                = [google_network_connectivity_spoke.hub_spoke_fgt]
-  count                     = var.fgt_passive ? 1 : 0
-  
+  depends_on = [google_network_connectivity_spoke.hub_spoke_fgt]
+  count      = var.fgt_passive ? 1 : 0
+
   name                      = "${var.prefix}-router-private-peer-passive-1"
   region                    = var.region
   router                    = google_compute_router.ncc_cloud-router.name
@@ -95,9 +95,9 @@ resource "google_compute_router_peer" "router-private-peer_passive_1" {
   peer_ip_address           = var.fgt-passive-ni_ip
 }
 resource "google_compute_router_peer" "router-private-peer_passive_2" {
-  depends_on                = [google_network_connectivity_spoke.hub_spoke_fgt]
-  count                     = var.fgt_passive ? 1 : 0
-  
+  depends_on = [google_network_connectivity_spoke.hub_spoke_fgt]
+  count      = var.fgt_passive ? 1 : 0
+
   name                      = "${var.prefix}-router-private-peer-passive-2"
   region                    = var.region
   router                    = google_compute_router.ncc_cloud-router.name

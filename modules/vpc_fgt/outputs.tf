@@ -1,4 +1,5 @@
 output "vpc_names" {
+  description = "Map of VPC names"
   value = {
     mgmt    = google_compute_network.vpc_mgmt.name
     public  = google_compute_network.vpc_public.name
@@ -7,6 +8,7 @@ output "vpc_names" {
 }
 
 output "vpc_self_links" {
+  description = "Map of VPC SelfLink"
   value = {
     mgmt    = google_compute_network.vpc_mgmt.self_link
     public  = google_compute_network.vpc_public.self_link
@@ -15,6 +17,7 @@ output "vpc_self_links" {
 }
 
 output "vpc_ids" {
+  description = "Map of VPC IDs"
   value = {
     mgmt    = google_compute_network.vpc_mgmt.id
     public  = google_compute_network.vpc_public.id
@@ -23,6 +26,7 @@ output "vpc_ids" {
 }
 
 output "subnet_names" {
+  description = "List of subnets names"
   value = {
     mgmt    = google_compute_subnetwork.subnet_mgmt.name
     public  = google_compute_subnetwork.subnet_public.name
@@ -32,6 +36,7 @@ output "subnet_names" {
 }
 
 output "subnet_self_links" {
+  description = "List of subnets SelfLink"
   value = {
     mgmt    = google_compute_subnetwork.subnet_mgmt.self_link
     public  = google_compute_subnetwork.subnet_public.self_link
@@ -41,6 +46,7 @@ output "subnet_self_links" {
 }
 
 output "subnet_ids" {
+  description = "List of subnets IDs"
   value = {
     mgmt    = google_compute_subnetwork.subnet_mgmt.id
     public  = google_compute_subnetwork.subnet_public.id
@@ -50,6 +56,7 @@ output "subnet_ids" {
 }
 
 output "subnet_cidrs" {
+  description = "List of subnets CIDRs"
   value = {
     public  = local.subnet_public_cidr
     private = local.subnet_private_cidr
@@ -59,6 +66,7 @@ output "subnet_cidrs" {
 }
 
 output "fgt-active-ni_ips" {
+  description = "Fortigate instance cluster member 1 map of IPs"
   value = {
     public  = local.fgt-1_ni_public_ip
     private = local.fgt-1_ni_private_ip
@@ -67,6 +75,7 @@ output "fgt-active-ni_ips" {
 }
 
 output "fgt-passive-ni_ips" {
+  description = "Fortigate instance cluster member 2 map of IPs"
   value = {
     public  = local.fgt-2_ni_public_ip
     private = local.fgt-2_ni_private_ip
@@ -75,18 +84,22 @@ output "fgt-passive-ni_ips" {
 }
 
 output "ilb_ip" {
-  value = local.ilb_ip
+  description = "Internal LB IP"
+  value       = local.ilb_ip
 }
 
 output "ncc_private_ips" {
-  value = local.ncc_private_ips
+  description = "Network Connectivity Center IPs within internal subnet"
+  value       = local.ncc_private_ips
 }
 
 output "ncc_public_ips" {
-  value = local.ncc_public_ips
+  description = "Network Connectivity Center IPs within public subnet"
+  value       = local.ncc_public_ips
 }
 
 output "faz_ni_ips" {
+  description = "Map of reserved IPs for FAZ"
   value = {
     public  = local.faz_ni_public_ip
     private = local.faz_ni_private_ip
@@ -94,6 +107,7 @@ output "faz_ni_ips" {
 }
 
 output "fmg_ni_ips" {
+  description = "Map of reserved IPs for FMG"
   value = {
     public  = local.fmg_ni_public_ip
     private = local.fmg_ni_private_ip
