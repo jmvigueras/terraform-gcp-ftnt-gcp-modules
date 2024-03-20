@@ -62,6 +62,7 @@ module "fgt" {
   fgt_config_2 = module.fgt_config.fgt_config_2
 
   fgt_passive = local.fgt_passive
+  fgt_version = local.fgt_version
 }
 #------------------------------------------------------------------------------------------------------------
 # Create VPC spokes peered to VPC FGT

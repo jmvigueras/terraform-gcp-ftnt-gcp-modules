@@ -26,9 +26,10 @@ resource "google_compute_region_health_check" "elb_health-check_fgt" {
 
 # Create External Load Balancer
 resource "google_compute_region_backend_service" "elb" {
-  provider              = google-beta
-  name                  = "${var.prefix}-elb"
-  region                = var.region
+  provider = google-beta
+  name     = "${var.prefix}-elb"
+  region   = var.region
+
   load_balancing_scheme = "EXTERNAL"
   protocol              = "UNSPECIFIED"
 
@@ -50,11 +51,11 @@ resource "google_compute_forwarding_rule" "elb_fwd-rule_l3" {
   name   = "${var.prefix}-elb-fwd-rule-l3"
   region = var.region
 
-  ip_address            = google_compute_address.elb_frontend_pip.id
+  load_balancing_scheme = "EXTERNAL"
   ip_protocol           = "L3_DEFAULT"
   all_ports             = true
-  load_balancing_scheme = "EXTERNAL"
   backend_service       = google_compute_region_backend_service.elb.id
+  ip_address            = google_compute_address.elb_frontend_pip.id
 }
 
 # Create health checks (global)
@@ -67,36 +68,3 @@ resource "google_compute_health_check" "elb_health-check_fgt_global" {
     port = var.backend-probe_port
   }
 }
-
-/*
-# Create External Load Balancer
-resource "google_compute_backend_service" "elb-global" {
-  provider              = google-beta
-  name                  = "${var.prefix}-elb-global"
-  load_balancing_scheme = "EXTERNAL"
-  protocol              = "SSL"
-
-  backend {
-    group = google_compute_instance_group.lb_group_fgt-1.self_link
-  }
-  backend {
-    group = google_compute_instance_group.lb_group_fgt-2.self_link
-  }
-
-  health_checks = [google_compute_health_check.elb_health-check_fgt_global.id]
-}
-*/
-
-/*
-## ELB Frontend forwarding rule - TCP Proxy
-resource "google_compute_forwarding_rule" "elb_fwd-rule_tcp80" {
-  name   = "${var.prefix}-elb-fwd-rule-tcp80"
-  region = var.region
-
-  ip_address            = google_compute_address.elb_frontend_pip_2.self_link
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL"
-  port_range            = "80"
-  backend_service       = google_compute_region_backend_service.elb.self_link
-}
-*/

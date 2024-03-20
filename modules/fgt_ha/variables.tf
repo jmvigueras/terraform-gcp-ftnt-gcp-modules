@@ -51,7 +51,7 @@ variable "license_file_2" {
 variable "fgt_version" {
   description = "FortiOS version"
   type        = string
-  default     = "726"
+  default     = "727"
 }
 
 variable "fgt_passive" {

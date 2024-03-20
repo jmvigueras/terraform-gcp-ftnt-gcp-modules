@@ -60,6 +60,7 @@ module "fgt" {
 
   config_fgsp = local.cluster_type == "fgsp" ? true : false
   fgt_passive = local.fgt_passive
+  fgt_version = local.fgt_version
 }
 #------------------------------------------------------------------------------------------------------------
 # Create NCC Router Applicance (private)

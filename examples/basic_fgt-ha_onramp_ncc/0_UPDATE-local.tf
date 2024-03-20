@@ -22,6 +22,7 @@ locals {
   }
 
   cluster_type = "fgcp"
+  fgt_version  = "727"
   fgt_passive  = true
   #-----------------------------------------------------------------------------------------------------
   # VPC spokes peered to VPC private

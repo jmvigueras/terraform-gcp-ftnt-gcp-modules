@@ -60,6 +60,7 @@ module "fgt" {
 
   config_fgsp = false
   fgt_passive = local.fgt_passive
+  fgt_version = local.fgt_version
 }
 #------------------------------------------------------------------------------------------------------------
 # Create VM in VPC spokes

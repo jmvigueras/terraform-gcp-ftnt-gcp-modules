@@ -22,6 +22,7 @@ locals {
   }
   vpc_spoke-subnet_cidrs = ["172.30.10.0/23"]
 
+  fgt_version = "727"
   fgt_passive = true
   #-----------------------------------------------------------------------------------------------------
   # FAZ and FMG variables

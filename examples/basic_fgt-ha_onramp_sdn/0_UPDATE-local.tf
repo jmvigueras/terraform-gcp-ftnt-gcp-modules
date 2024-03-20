@@ -21,6 +21,7 @@ locals {
     bgp_asn = "65000"
   }
 
+  fgt_version  = "727"
   fgt_passive = true
   #-----------------------------------------------------------------------------------------------------
   # VPC spokes peered to VPC private
