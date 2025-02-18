@@ -57,3 +57,9 @@ variable "tags" {
   type        = list(string)
   default     = ["tag-default"]
 }
+
+variable "user_data" {
+  description = "VM custom data"
+  type    = string
+  default = null
+}

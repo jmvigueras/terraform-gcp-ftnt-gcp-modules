@@ -51,7 +51,7 @@ variable "license_type" {
 variable "machine" {
   description = "value"
   type        = string
-  default     = "n1-standard-4"
+  default     = "n2-standard-4"
 }
 
 variable "admin_port" {

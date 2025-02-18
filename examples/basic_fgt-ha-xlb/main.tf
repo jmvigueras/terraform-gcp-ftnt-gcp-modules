@@ -82,8 +82,6 @@ module "xlb" {
 }
 
 
-
-
 #------------------------------------------------------------------------------------------------------------
 # Necessary variables
 #------------------------------------------------------------------------------------------------------------
@@ -95,6 +93,6 @@ resource "tls_private_key" "ssh-rsa" {
 
 resource "local_file" "ssh_private_key_pem" {
   content         = tls_private_key.ssh-rsa.private_key_pem
-  filename        = ".ssh/ssh-key.pem"
+  filename        = ".ssh/${var.prefix}-ssh-key.pem"
   file_permission = "0600"
 }

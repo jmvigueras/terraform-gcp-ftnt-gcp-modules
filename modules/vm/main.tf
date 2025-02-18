@@ -9,7 +9,7 @@ resource "google_compute_address" "instance_pip" {
 # Create FGTVM compute active instance
 resource "google_compute_instance" "instance" {
   count        = length(var.subnet_name)
-  name         = "${var.subnet_name[count.index]}-instance"
+  name         = "${var.subnet_name[count.index]}-vm"
   machine_type = var.machine_type
   zone         = var.zone
 
@@ -28,7 +28,7 @@ resource "google_compute_instance" "instance" {
   }
   metadata = {
     ssh-keys       = "${var.gcp-user_name}:${var.rsa-public-key}"
-    startup-script = file("${path.module}/templates/user-data.tpl")
+    startup-script = var.user_data != null ? var.user_data : file("${path.module}/templates/user-data.tpl")
   }
   service_account {
     scopes = ["userinfo-email", "compute-rw", "storage-ro", "cloud-platform"]
@@ -38,5 +38,4 @@ resource "google_compute_instance" "instance" {
     automatic_restart = false
   }
 }
-
 
