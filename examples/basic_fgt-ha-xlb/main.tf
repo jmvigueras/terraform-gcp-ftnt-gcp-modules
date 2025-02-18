@@ -33,7 +33,7 @@ module "fgt_config" {
   spoke        = var.onramp
   ilb_ip       = module.fgt_vpc.ilb_ip
 
-  vpc-spoke_cidr = concat(var.vpc_spoke-subnet_cidrs, [module.fgt_vpc.subnet_cidrs["bastion"]])
+  vpc-spoke_cidr = [module.fgt_vpc.subnet_cidrs["bastion"]]
 }
 #------------------------------------------------------------------------------------------------------------
 # Create FGT cluster instances
@@ -64,18 +64,6 @@ module "fgt" {
   fgt_version = var.fgt_version
 }
 #------------------------------------------------------------------------------------------------------------
-# Create VPC spokes peered to VPC FGT
-#------------------------------------------------------------------------------------------------------------
-module "vpc_spoke" {
-  source = "../../modules/vpc_spoke"
-
-  prefix = var.prefix
-  region = var.region
-
-  spoke-subnet_cidrs = var.vpc_spoke-subnet_cidrs
-  fgt_vpc_self_link  = module.fgt_vpc.vpc_self_links["private"]
-}
-#------------------------------------------------------------------------------------------------------------
 # Create Internal and External Load Balancer
 #------------------------------------------------------------------------------------------------------------
 module "xlb" {
@@ -92,22 +80,6 @@ module "xlb" {
   fgt_active_self_link  = module.fgt.fgt_active_self_link
   fgt_passive_self_link = module.fgt.fgt_passive_self_link[0]
 }
-#------------------------------------------------------------------------------------------------------------
-# Create VM in VPC spokes
-#------------------------------------------------------------------------------------------------------------
-module "vm_spoke" {
-  source = "../../modules/vm"
-
-  prefix = var.prefix
-  region = var.region
-  zone   = var.zone1
-
-  rsa-public-key = trimspace(tls_private_key.ssh-rsa.public_key_openssh)
-  gcp-user_name  = split("@", data.google_client_openid_userinfo.me.email)[0]
-
-  subnet_name = module.vpc_spoke.subnet_name
-}
-
 
 
 

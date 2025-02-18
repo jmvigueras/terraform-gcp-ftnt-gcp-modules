@@ -20,30 +20,3 @@ provider "google-beta" {
   access_token = var.token
 }
 
-# GCP resourcers prefix description
-variable "project" {
-  type    = string
-  default = null
-}
-
-# GCP region
-variable "region" {
-  type    = string
-  default = "europe-west4" #Default Region
-}
-# GCP zone
-variable "zone1" {
-  type    = string
-  default = "europe-west4-a" #Default Zone
-}
-
-# GCP zone
-variable "zone2" {
-  type    = string
-  default = "europe-west4-a" #Default Zone
-}
-
-variable "token" {
-  type    = string
-  default = null
-}

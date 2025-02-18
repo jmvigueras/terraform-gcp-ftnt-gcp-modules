@@ -1,0 +1,8 @@
+# GCP project name
+project = "<your-gcp-project>"
+
+# Region details
+region = "europe-west2"
+zone1  = "europe-west2-a"
+zone2  = "europe-west2-b"
+
