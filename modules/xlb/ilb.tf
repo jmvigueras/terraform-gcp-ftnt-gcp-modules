@@ -37,10 +37,12 @@ resource "google_compute_region_backend_service" "ilb" {
   protocol              = "UNSPECIFIED"
 
   backend {
-    group = google_compute_instance_group.lb_group_fgt-1.id
+    group          = google_compute_instance_group.lb_group_fgt-1.id
+    balancing_mode = "CONNECTION"
   }
   backend {
-    group = google_compute_instance_group.lb_group_fgt-2.id
+    group          = google_compute_instance_group.lb_group_fgt-2.id
+    balancing_mode = "CONNECTION"
   }
 
   health_checks = [google_compute_region_health_check.ilb_health-check_fgt.id]
