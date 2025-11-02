@@ -1,54 +1,27 @@
-# Forigate cluster deployment
-## Introduction
-
-This deployment will create two Fortigate Clusters Active/Passive in two zones and with 3 ports (Management-HA, Public and Private)
+# Fortigate cluster deployment with Load Balancers sandwich
 
 > !Tip
 > This is the recommended setup for HA in GCP
 
-> !Note
-> it is possible to configure mangement and HA sync port since within some interface since version 7.0.2
+## Deployment overview
 
-## Module use
+This example demonstrates the deployment of a highly available FortiGate cluster on Google Cloud Platform (GCP) using a load balancer sandwich architecture. The setup includes:
 
-### Variables
+- **FortiGate HA Cluster**: Two FortiGate instances configured in FGCP (FortiGate Clustering Protocol) mode for high availability
+- **Load Balancer Sandwich**: External and internal load balancers to distribute traffic and provide seamless failover
+- **VPC Architecture**: Dedicated VPC for FortiGates with separate spoke VPCs for workload isolation
+- **Cross-Zone Deployment**: FortiGates deployed across multiple availability zones for enhanced resilience
 
-- `prefix`: Prefix to be used for resource naming
-- `location`: Azure region where resources will be deployed
-- `admin_cidr`: CIDR range for admin access
-- `admin_username`: Administrator username for FortiGate instances
-- `admin_password`: Administrator password for FortiGate instances
-- `fgt_vnet_cidr`: CIDR block for the FortiGate VNet
-- `license_type`: FortiGate license type (BYOL or PAYG)
-- `fgt_version`: FortiGate version to deploy
-- `machine`: GCP VM type for FortiGate instances
-- `tags`: Map of tags to apply to resources
+### Architecture Components
 
-> [!NOTE]
-> Those variables have a default value and if not provided, Azure related resources will be deployed or default values will be used. 
+- **External Load Balancer (XLB)**: Handles incoming traffic and distributes it to the active FortiGate
+- **FortiGate Cluster**: Primary and secondary FortiGate instances with synchronized configuration
+- **Internal Networks**: Dedicated subnets for management, internal, and synchronization traffic
+- **Spoke VPCs**: Isolated networks for application workloads with routing through the FortiGate cluster
+- **Test VM**: Example workload deployed in spoke VPC to validate connectivity
 
-### Terraform code
+This configuration provides enterprise-grade security with automatic failover capabilities and is the recommended approach for production FortiGate deployments in GCP.
 
-```hcl
-module "fgt-ha-xlb" {
-    source = "./"
-
-    region = "europe-west2"
-    prefix = "fgt-ha-xlb"
-
-    license_type = "payg"
-    cluster_type = "fgcp"
-
-    fgt_vnet_cidr = "172.30.0.0/23"
-}
-```
-
-## Deployment Overview
-
-- New VPCs with necessary subents: Management (MGMT), Public and Private
-- Fortigate cluster: 2 instances with 3 interfaces in active-passive cluster FGCP.
-- Load Balancer (LB) sandwich deployment, one LB for frontend and another for backend communications.
-- HA failover is handeled by LB
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -62,8 +35,8 @@ module "fgt-ha-xlb" {
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | 4.48.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.4.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
 
 ## Modules
 
@@ -72,6 +45,8 @@ module "fgt-ha-xlb" {
 | <a name="module_fgt"></a> [fgt](#module\_fgt) | ../../modules/fgt_ha | n/a |
 | <a name="module_fgt_config"></a> [fgt\_config](#module\_fgt\_config) | ../../modules/fgt_config | n/a |
 | <a name="module_fgt_vpc"></a> [fgt\_vpc](#module\_fgt\_vpc) | ../../modules/vpc_fgt | n/a |
+| <a name="module_vm_spoke"></a> [vm\_spoke](#module\_vm\_spoke) | ../../modules/vm | n/a |
+| <a name="module_vpc_spoke"></a> [vpc\_spoke](#module\_vpc\_spoke) | ../../modules/vpc_spoke | n/a |
 | <a name="module_xlb"></a> [xlb](#module\_xlb) | ../../modules/xlb | n/a |
 
 ## Resources
@@ -92,12 +67,13 @@ module "fgt-ha-xlb" {
 | <a name="input_fgt_passive"></a> [fgt\_passive](#input\_fgt\_passive) | Deploy or not secondary FortiGate | `bool` | `true` | no |
 | <a name="input_fgt_version"></a> [fgt\_version](#input\_fgt\_version) | FortiOS version | `string` | `"745"` | no |
 | <a name="input_license_type"></a> [license\_type](#input\_license\_type) | value | `string` | `"payg"` | no |
-| <a name="input_machine"></a> [machine](#input\_machine) | value | `string` | `"n2-standard-4"` | no |
+| <a name="input_machine"></a> [machine](#input\_machine) | value | `string` | `"n1-standard-4"` | no |
 | <a name="input_onramp"></a> [onramp](#input\_onramp) | value | `map(string)` | <pre>{<br/>  "bgp_asn": "65000",<br/>  "cidr": "172.30.0.0/23",<br/>  "id": "fgt"<br/>}</pre> | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | GCP resources prefix description | `string` | `"fgt-ha-xlb"` | no |
 | <a name="input_project"></a> [project](#input\_project) | GCP project | `string` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | GCP region to deploy | `string` | `"europe-west2"` | no |
 | <a name="input_token"></a> [token](#input\_token) | GCP provider access token | `string` | `null` | no |
+| <a name="input_vpc_spoke-subnet_cidrs"></a> [vpc\_spoke-subnet\_cidrs](#input\_vpc\_spoke-subnet\_cidrs) | List of CIDRs ranges to deploy VPC spokes to FortiGate HUB | `list(string)` | <pre>[<br/>  "172.30.10.0/23",<br/>  "172.30.20.0/23"<br/>]</pre> | no |
 | <a name="input_zone1"></a> [zone1](#input\_zone1) | GCP region zone 1 | `string` | `"europe-west2-a"` | no |
 | <a name="input_zone2"></a> [zone2](#input\_zone2) | GCP region zone 2 | `string` | `"europe-west2-b"` | no |
 
@@ -106,12 +82,7 @@ module "fgt-ha-xlb" {
 | Name | Description |
 |------|-------------|
 | <a name="output_fgt"></a> [fgt](#output\_fgt) | n/a |
-| <a name="output_public_key_openssh"></a> [public\_key\_openssh](#output\_public\_key\_openssh) | n/a |
-| <a name="output_subnet_cidrs"></a> [subnet\_cidrs](#output\_subnet\_cidrs) | n/a |
-| <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | n/a |
-| <a name="output_subnet_names"></a> [subnet\_names](#output\_subnet\_names) | n/a |
-| <a name="output_vpc_ids"></a> [vpc\_ids](#output\_vpc\_ids) | n/a |
-| <a name="output_vpc_self_links"></a> [vpc\_self\_links](#output\_vpc\_self\_links) | n/a |
+| <a name="output_vm_spoke"></a> [vm\_spoke](#output\_vm\_spoke) | n/a |
 <!-- END_TF_DOCS -->
 
 ## Support

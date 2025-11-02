@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## v0.0.1 - 2024-01-16
+## v1.0.0 - 2025-11-02
+- Update documentation README files and terraform mark-downs
 
-- Initial commit
+## v0.0.2 to v0.0.9
+- Improve modules and features

@@ -83,9 +83,9 @@ No modules.
 | <a name="input_fmg_sn"></a> [fmg\_sn](#input\_fmg\_sn) | n/a | `string` | `""` | no |
 | <a name="input_fortiflex_token_1"></a> [fortiflex\_token\_1](#input\_fortiflex\_token\_1) | FortiFlex tokens | `string` | `""` | no |
 | <a name="input_fortiflex_token_2"></a> [fortiflex\_token\_2](#input\_fortiflex\_token\_2) | n/a | `string` | `""` | no |
-| <a name="input_hub"></a> [hub](#input\_hub) | Variable to create a a VPN HUB | `list(map(string))` | <pre>[<br>  {<br>    "bgp-asn_hub": "65002",<br>    "bgp-asn_spoke": "65000",<br>    "cidr": "172.30.0.0/23",<br>    "dpd-retryinterval": "10",<br>    "id": "fgt",<br>    "ike-version": "2",<br>    "mode_cfg": true,<br>    "network_id": "1",<br>    "vpn_cidr": "10.10.10.0/24",<br>    "vpn_port": "public",<br>    "vpn_psk": "secret-key-123"<br>  }<br>]</pre> | no |
-| <a name="input_hub-peer_vxlan"></a> [hub-peer\_vxlan](#input\_hub-peer\_vxlan) | Details for vxlan connection to hub (simulated L2/MPLS) | `map(string)` | <pre>{<br>  "bgp-asn": "65000",<br>  "local-ip": "10.10.30.2",<br>  "public-ip": "",<br>  "remote-ip": "10.10.30.1",<br>  "vni": "1100"<br>}</pre> | no |
-| <a name="input_hubs"></a> [hubs](#input\_hubs) | Details to crate VPN connections | `list(map(string))` | <pre>[<br>  {<br>    "bgp_asn": "65000",<br>    "cidr": "172.20.30.0/24",<br>    "dpd_retryinterval": "5",<br>    "external_ip": "11.11.11.11",<br>    "hck_ip": "172.20.30.1",<br>    "hub_ip": "172.20.30.1",<br>    "id": "HUB",<br>    "ike_version": "2",<br>    "network_id": "1",<br>    "sdwan_port": "public",<br>    "site_ip": "172.20.30.10",<br>    "vpn_psk": "secret"<br>  }<br>]</pre> | no |
+| <a name="input_hub"></a> [hub](#input\_hub) | Variable to create a a VPN HUB | `list(map(string))` | <pre>[<br/>  {<br/>    "bgp-asn_hub": "65002",<br/>    "bgp-asn_spoke": "65000",<br/>    "cidr": "172.30.0.0/23",<br/>    "dpd-retryinterval": "10",<br/>    "id": "fgt",<br/>    "ike-version": "2",<br/>    "mode_cfg": true,<br/>    "network_id": "1",<br/>    "vpn_cidr": "10.10.10.0/24",<br/>    "vpn_port": "public",<br/>    "vpn_psk": "secret-key-123"<br/>  }<br/>]</pre> | no |
+| <a name="input_hub-peer_vxlan"></a> [hub-peer\_vxlan](#input\_hub-peer\_vxlan) | Details for vxlan connection to hub (simulated L2/MPLS) | `map(string)` | <pre>{<br/>  "bgp-asn": "65000",<br/>  "local-ip": "10.10.30.2",<br/>  "public-ip": "",<br/>  "remote-ip": "10.10.30.1",<br/>  "vni": "1100"<br/>}</pre> | no |
+| <a name="input_hubs"></a> [hubs](#input\_hubs) | Details to crate VPN connections | `list(map(string))` | <pre>[<br/>  {<br/>    "bgp_asn": "65000",<br/>    "cidr": "172.20.30.0/24",<br/>    "dpd_retryinterval": "5",<br/>    "external_ip": "11.11.11.11",<br/>    "hck_ip": "172.20.30.1",<br/>    "hub_ip": "172.20.30.1",<br/>    "id": "HUB",<br/>    "ike_version": "2",<br/>    "network_id": "1",<br/>    "sdwan_port": "public",<br/>    "site_ip": "172.20.30.10",<br/>    "vpn_psk": "secret"<br/>  }<br/>]</pre> | no |
 | <a name="input_ilb_ip"></a> [ilb\_ip](#input\_ilb\_ip) | n/a | `string` | `null` | no |
 | <a name="input_keypair"></a> [keypair](#input\_keypair) | Provide a keypair for accessing the FortiGate instances | `string` | `null` | no |
 | <a name="input_license_file_1"></a> [license\_file\_1](#input\_license\_file\_1) | license file for the active fgt | `string` | `"./licenses/license1.lic"` | no |
@@ -93,13 +93,13 @@ No modules.
 | <a name="input_license_type"></a> [license\_type](#input\_license\_type) | License Type to create FortiGate-VM Provide the license type for FortiGate-VM Instances, either byol or payg. | `string` | `"payg"` | no |
 | <a name="input_mgmt_port"></a> [mgmt\_port](#input\_mgmt\_port) | n/a | `string` | `"port3"` | no |
 | <a name="input_ncc_bgp-asn"></a> [ncc\_bgp-asn](#input\_ncc\_bgp-asn) | n/a | `string` | `"65515"` | no |
-| <a name="input_ncc_peers"></a> [ncc\_peers](#input\_ncc\_peers) | n/a | `list(list(string))` | <pre>[<br>  [<br>    "172.30.0.68",<br>    "172.30.0.69"<br>  ]<br>]</pre> | no |
-| <a name="input_ports"></a> [ports](#input\_ports) | n/a | `map(string)` | <pre>{<br>  "ha_port": "port3",<br>  "mgtm": "port3",<br>  "private": "port2",<br>  "public": "port1"<br>}</pre> | no |
+| <a name="input_ncc_peers"></a> [ncc\_peers](#input\_ncc\_peers) | n/a | `list(list(string))` | <pre>[<br/>  [<br/>    "172.30.0.68",<br/>    "172.30.0.69"<br/>  ]<br/>]</pre> | no |
+| <a name="input_ports"></a> [ports](#input\_ports) | n/a | `map(string)` | <pre>{<br/>  "ha_port": "port3",<br/>  "mgtm": "port3",<br/>  "private": "port2",<br/>  "public": "port1"<br/>}</pre> | no |
 | <a name="input_private_port"></a> [private\_port](#input\_private\_port) | n/a | `string` | `"port2"` | no |
 | <a name="input_public_port"></a> [public\_port](#input\_public\_port) | n/a | `string` | `"port1"` | no |
 | <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | ----------------------------------------------------------------------------------- Route to change by SDN connector when FGCP and no LB ----------------------------------------------------------------------------------- | `list(string)` | `null` | no |
 | <a name="input_rsa-public-key"></a> [rsa-public-key](#input\_rsa-public-key) | SSH RSA public key for KeyPair if not exists | `string` | `null` | no |
-| <a name="input_spoke"></a> [spoke](#input\_spoke) | Default parameters to configure a site | `map(any)` | <pre>{<br>  "bgp_asn": "65000",<br>  "cidr": "172.30.0.0/23",<br>  "id": "fgt"<br>}</pre> | no |
+| <a name="input_spoke"></a> [spoke](#input\_spoke) | Default parameters to configure a site | `map(any)` | <pre>{<br/>  "bgp_asn": "65000",<br/>  "cidr": "172.30.0.0/23",<br/>  "id": "fgt"<br/>}</pre> | no |
 | <a name="input_subnet_cidrs"></a> [subnet\_cidrs](#input\_subnet\_cidrs) | n/a | `map(string)` | `null` | no |
 | <a name="input_vpc-spoke_cidr"></a> [vpc-spoke\_cidr](#input\_vpc-spoke\_cidr) | n/a | `list(string)` | `null` | no |
 

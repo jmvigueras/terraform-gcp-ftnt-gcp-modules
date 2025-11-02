@@ -25,7 +25,7 @@ variable "subnet_name" {
 variable "image-vm" {
   description = "VM test Image name"
   type        = string
-  default     = "debian-cloud/debian-11"
+  default     = "ubuntu-os-cloud/ubuntu-2204-lts"
 }
 
 variable "ssh-keys" {
@@ -60,6 +60,6 @@ variable "tags" {
 
 variable "user_data" {
   description = "VM custom data"
-  type    = string
-  default = null
+  type        = string
+  default     = null
 }

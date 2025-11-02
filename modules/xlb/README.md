@@ -2,6 +2,38 @@
 
 Create forwarding rules, public and private to fortigates.
 
+## Deployment overview
+
+This Terraform module creates a complete load balancing solution for Fortinet FortiGate firewalls in Google Cloud Platform (GCP). The module provisions both external and internal load balancers with the following components:
+
+### External Load Balancer (ELB)
+- **Public IP address** for external traffic ingress
+- **Regional backend service** with FortiGate instances as backends
+- **Health checks** to monitor FortiGate availability
+- **Layer 3 forwarding rules** for traffic distribution
+
+### Internal Load Balancer (ILB)
+- **Internal IP address** for private network traffic
+- **Regional backend service** with FortiGate instances as backends
+- **Health checks** for backend monitoring
+- **All-traffic forwarding rules** for comprehensive load balancing
+
+### Instance Groups
+- **Managed instance groups** for both FortiGate instances
+- **Multi-zone deployment** across specified availability zones
+- **Automatic health monitoring** integration
+
+### Routing Configuration
+- **Private routes** within the FortiGate VPC for internal traffic flow
+- **Spoke routes** (optional) for peered VPC networks
+- **Custom route priorities** for traffic steering
+
+### Key Features
+- **High availability** with active-passive FortiGate deployment
+- **Health monitoring** using configurable probe ports (default: 8008)
+- **Multi-VPC support** with optional spoke network integration
+- **Flexible configuration** with customizable prefixes and regions
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

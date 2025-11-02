@@ -46,7 +46,7 @@ No modules.
 | <a name="input_fgt_config_2"></a> [fgt\_config\_2](#input\_fgt\_config\_2) | Bootstrap config for Fortigate 2 | `string` | `""` | no |
 | <a name="input_fgt_ha_fgsp"></a> [fgt\_ha\_fgsp](#input\_fgt\_ha\_fgsp) | Boolean for a Fortigate cluster type FGSP | `bool` | `false` | no |
 | <a name="input_fgt_passive"></a> [fgt\_passive](#input\_fgt\_passive) | Create Fortigate cluster member 2 | `bool` | `false` | no |
-| <a name="input_fgt_version"></a> [fgt\_version](#input\_fgt\_version) | FortiOS version | `string` | `"726"` | no |
+| <a name="input_fgt_version"></a> [fgt\_version](#input\_fgt\_version) | FortiOS version | `string` | `"728"` | no |
 | <a name="input_gcp-user_name"></a> [gcp-user\_name](#input\_gcp-user\_name) | GCP user name that launch Terrafrom | `string` | `null` | no |
 | <a name="input_license_type"></a> [license\_type](#input\_license\_type) | License type for FortiGate-VM Instances, either byol or payg. | `string` | `"payg"` | no |
 | <a name="input_machine"></a> [machine](#input\_machine) | GCP instance machine type | `string` | `"n1-standard-4"` | no |

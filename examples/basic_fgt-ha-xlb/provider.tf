@@ -7,16 +7,10 @@ terraform {
     }
   }
 }
-
 provider "google" {
-  project = var.project
-  //region       = var.region
-  //zone         = var.zone1
-  //access_token = var.token
+  region = var.region
 }
 provider "google-beta" {
-  project = var.project
-  //region       = var.region
-  //zone         = var.zone1
-  //access_token = var.token
+  region = var.region
 }
+

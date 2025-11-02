@@ -14,8 +14,8 @@ cat <<EOF > /var/www/html/index.html
     <h1><span style="color:Red">Fortinet</span> - GCP Linux VM</h1>
     <p></p>
     <hr/>
-    <h2>EC2 Instance Name: $NAME</h2>
-    <h2>EC2 Instance IP: $IP</h2>
+    <h2>GCP Instance Name: $NAME</h2>
+    <h2>GCP Instance IP: $IP</h2>
     </center>
 </body>
 </html>
